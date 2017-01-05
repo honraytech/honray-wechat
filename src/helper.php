@@ -1,8 +1,6 @@
 <?php
 
 use think\wechat\WechatAuth;
-use think\Request;
-
 /**
  * [get_wechat_token 获取微信token和openid]
  * @linchuangbin
@@ -10,25 +8,22 @@ use think\Request;
  * @param     [string]       $appid     [微信配置]
  * @param     [string]       $appsecret [微信配置]
  * @param     [string]       $url       [回调url]
+ * @param     [string]       $code      [微信回调code]
  */
-function get_wechat_token($appid, $appsecret, $url)
+function get_wechat_token($appid, $appsecret, $url = '', $code = '')
 {
-    if(empty($openid) || empty($appsecret) || empty($url)) {
-        return 'openid或appsecret或$url 为空';
-    }
 
-    $auth = new WechatAuth($config['appid'], $config['appsecret']);
-    $code = Request::instance()->param('code');
+    $auth = new WechatAuth($appid, $appsecret);
 
     if ($code) {
         $ret = $auth->getAccessToken('code',$code);
         $url = $url.'?openid='.$ret['openid'].'&token='.$ret['access_token'];
-        redirect($url);
+        return $url;
     }
 
     $url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     $url = $auth->getRequestCodeURL($url,'snsapi_base','snsapi_userinfo');
-    redirect($url);
+    return $url;
 }
 
 /**
@@ -43,9 +38,6 @@ function get_wechat_token($appid, $appsecret, $url)
  */
 function get_wechat_userInfo($appid, $appsecret, $token, $openid)
 {
-    if(empty($openid) || empty($appsecret) || empty($token) || empty($openid)) {
-        return 'openid或appsecret或$token或openid 为空';
-    }
     $auth = new WechatAuth($appid, $appsecret, $token);
     $userInfo = $auth->getUserInfo($openid);
 
