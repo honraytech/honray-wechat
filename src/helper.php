@@ -1,6 +1,7 @@
 <?php
-
 use think\wechat\WechatAuth;
+use think\wechat\Jssdk;
+
 /**
  * [get_wechat_token 获取微信token和openid]
  * @linchuangbin
@@ -42,6 +43,22 @@ function get_wechat_userInfo($appid, $appsecret, $token, $openid)
     $userInfo = $auth->getUserInfo($openid);
 
     return $userInfo;
+}
+
+/**
+ * [get_wechat_signPackage 获取jssdk配置]
+ * @linchuangbin
+ * @DateTime  2017-01-05T21:07:21+0800
+ * @param     [type]                   $appId     [微信配置]
+ * @param     [type]                   $appSecret [微信配置]
+ * @return    [array]                             [配置数组]
+ */
+function get_wechat_signPackage($appId, $appSecret)
+{
+    $jssdk = new Jssdk($appId,$appSecret);
+    $signPackage = $jssdk->GetSignPackage();
+
+    return $signPackage;
 }
 
 ?>
