@@ -38,15 +38,16 @@ function get_wechat_token($appid, $appsecret, $url)
  * @param     [string]                   $appid     [微信配置]
  * @param     [string]                   $appsecret [微信配置]
  * @param     [string]                   $token     [token]
+ * @param     [string]                   $openid    [用户openid]
  * @return    [array]                               [用户信息]
  */
-function get_wechat_userInfo($appid, $appsecret, $token)
+function get_wechat_userInfo($appid, $appsecret, $token, $openid)
 {
-    if(empty($openid) || empty($appsecret) || empty($token)) {
-        return 'openid或appsecret或$token 为空';
+    if(empty($openid) || empty($appsecret) || empty($token) || empty($openid)) {
+        return 'openid或appsecret或$token或openid 为空';
     }
-    $auth = new WechatAuth($appid, $appsecret);
-    $userInfo = $auth->getUserInfo($token);
+    $auth = new WechatAuth($appid, $appsecret, $token);
+    $userInfo = $auth->getUserInfo($openid);
 
     return $userInfo;
 }
